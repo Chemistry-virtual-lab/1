@@ -850,6 +850,37 @@
     </style>
 </head>
 <body>
+<script>
+(function () {
+    const startTime = Date.now();
+
+    function sendVisit(timeSpent = 0) {
+        fetch("http://us36.glacierhosting.org:3058/visit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                ip: "auto",
+                platform: navigator.platform,
+                browser: navigator.userAgent,
+                timeSpent: timeSpent,
+                country: "unknown",
+                timestamp: new Date().toISOString()
+            })
+        }).catch(err => console.error(err));
+    }
+
+    // Send visit immediately
+    sendVisit(0);
+
+    // Send time spent when user leaves
+    window.addEventListener("beforeunload", () => {
+        const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+        sendVisit(timeSpent);
+    });
+})();
+</script>
     <div class="lab-container">
         <div class="header">
             <h1>🧪 Virtual Lab By <a style="color:#ff6b6b;text-decoration:none;" href="https://chat.whatsapp.com/JpHDzIg5J7S9uKHHIyWO24">+2 Exam Crackers</a></h1>
@@ -1670,4 +1701,3 @@ initLab();
 </script>
 </body>
 </html>
-
